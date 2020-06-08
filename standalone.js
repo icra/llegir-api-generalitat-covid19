@@ -3,11 +3,11 @@ const https=require('https');
 function consulta(filtre){
   filtre = filtre || "";
 
-  let api='https://analisi.transparenciacatalunya.cat/resource/xuwf-dxjd.json';
-  let api_amb_filtre = api + filtre;
-  console.log(`consultant ${api_amb_filtre}\n`);
+  let url='https://analisi.transparenciacatalunya.cat/resource/xuwf-dxjd.json';
+  let url_amb_filtre = url + filtre;
+  console.log(`consultant ${url_amb_filtre}\n`);
 
-  https.get(api_amb_filtre, resp=>{
+  https.get(url_amb_filtre, resp=>{
     let data='';
 
     //a chunk of data has been recieved.
@@ -123,6 +123,7 @@ function consulta(filtre){
   231    Girona         Sarria_de_Ter
 */
 
+//consulta àrea besós
 consulta(`?$select=data,sum(numcasos)
   &$group=data
   &$where=resultatcoviddescripcio not like 'Sospit' AND (
@@ -209,5 +210,5 @@ consulta(`?$select=data,sum(numcasos)
     abscodi = '199' OR
     abscodi = '231'
   )
-  &$order=data DESC
+  &$order=data ASC
 `);
