@@ -21,10 +21,12 @@
 
   <!--seccio filtres-->
   <div>
-    <b>Filtra les dades</b>
+    <b>Filtra les dades per:</b>
     <table>
       <tr v-for="c in claus">
-        <td v-html="c.clau">
+        <td>
+          <span v-html="c.clau"></span>
+        </td>
         <td>
           <input
             v-model="c.filtre"
@@ -41,6 +43,7 @@
         </td>
       </tr>
     </table>
+
     <button @click="llegeix_api()" style="padding:1em 2em">
       LLEGIR API (aplicant filtres)
     </button>
@@ -48,23 +51,20 @@
 
   <!--nombre de resultats-->
   <div v-if="dades">
-    Resultats: {{dades.length}}
-    <hr>
+    Resultats: {{dades.length}} <hr>
   </div>
 
   <!--taula resultats-->
   <table border=1 style="border-collapse:collapse">
     <tr>
-      <th
-        v-for="c in claus"
-      >
+      <th v-for="c in claus">
         <span class=clau @click="ordena_dades(c.clau)">
           {{c.clau}}
         </span>
       </th>
     </tr>
     <tr v-if="!dades">
-      <td :colspan="claus.length">clica el botó "llegir api"</td>
+      <td :colspan="claus.length">clica el botó "LLEGIR API"</td>
     </tr>
     <tr v-for="d in dades">
       <td v-for="c in claus">
@@ -78,7 +78,7 @@
   let app=new Vue({
     el:"#app",
     data:{
-      dades:null,
+      dades:null, //dades llegides api
       claus:[
         {clau:"data",                     tipus:"date", filtre:"", not_equal:false},
         {clau:"regiosanitariacodi",       tipus:"text", filtre:"", not_equal:false},
@@ -94,11 +94,11 @@
       ],
     },
     methods:{
-      //consulta endpoint api amb els filtres
+      //consulta api endpoint amb filtres
       llegeix_api(){
         let url = "https://analisi.transparenciacatalunya.cat/resource/xuwf-dxjd.json";
         let url_amb_filtre = url + this.get_filtre();
-        console.log("consultant "+url_amb_filtre+" ...");
+        console.log("consultant "+url_amb_filtre);
         let req = new XMLHttpRequest();
         req.open('GET',url_amb_filtre);
         let _this = this;
@@ -108,7 +108,7 @@
         req.send();
       },
 
-      //crea un filtre per l'endpoint de l'api. per exemple --> "api-url.com/?data=2020-12-31"
+      //crea un filtre per l'api. per exemple --> "api-url.com/?data=2020-12-31"
       get_filtre(){
         let filtre=[];
         this.claus.forEach(c=>{
@@ -127,12 +127,12 @@
         }
       },
 
-      //ordena dades
-      ordena_dades(key){
+      //ordena dades by clau
+      ordena_dades(clau){
         this.dades.sort(function(a,b){
-          let x = a[key];
-          let y = b[key];
-          return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+          let x=a[clau];
+          let y=b[clau];
+          return ( (x<y) ? -1 : ( (x>y) ? 1 : 0 ) );
         });
       },
     },
