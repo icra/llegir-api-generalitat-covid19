@@ -21,3 +21,7 @@ obrir un terminal i executar la següent comanda:
 ```
 
 En cas de no tenir node instalat => https://nodejs.org
+
+L'arxiu 'standalone.js' es pot editar per canviar-ne els filtres. Per veure com
+es filtren les dades fent servir la notació "SoQL" veure: => https://dev.socrata.com/docs/queries/
+

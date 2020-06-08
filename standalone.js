@@ -31,11 +31,11 @@ function consulta(filtre){
 }
 
 /*
-com filtrar:
-  1. agrupar per dies
-  2. agregar per àrea bàsica de salut (abs)
-  3. sumar els casos
-  4. excloure "sospitosos"
+  com filtrar:
+    1. agrupar per dies
+    2. agregar per àrea bàsica de salut (abs)
+    3. sumar els casos
+    4. excloure "sospitosos"
 */
 
 /*
