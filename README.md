@@ -10,7 +10,7 @@ https://analisi.transparenciacatalunya.cat/resource/xuwf-dxjd.json
 
 ## Instruccions interfície web
 
-obrir l'arxiu '''index.html''' amb un explorador web (Chrome, Firefox, Safari...)
+obrir l'arxiu ```index.html``` amb un explorador web (Chrome, Firefox, Safari...)
 
 ## Instruccions script standalone.js
 
@@ -22,6 +22,6 @@ obrir un terminal i executar la següent comanda:
 
 En cas de no tenir node instalat => https://nodejs.org
 
-L'arxiu '''standalone.js''' es pot editar per canviar-ne els filtres. Per veure com
+L'arxiu ```standalone.js``` es pot editar per canviar-ne els filtres. Per veure com
 es filtren les dades fent servir la notació "SoQL" veure: => https://dev.socrata.com/docs/queries/
 
