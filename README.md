@@ -8,6 +8,16 @@ https://analisi.transparenciacatalunya.cat/Salut/Registre-de-casos-de-COVID-19-r
 api endpoint (url amb les dades que volem):
 https://analisi.transparenciacatalunya.cat/resource/xuwf-dxjd.json
 
-## Instruccions
+## Instruccions interfície web
 
 obrir l'arxiu "index.html" amb un explorador web (Chrome, Firefox, Safari...)
+
+## Instruccions script standalone.js
+
+obrir un terminal i executar la següent comanda:
+
+```
+  node standalone.js
+```
+
+En cas de no tenir node instalat => https://nodejs.org
