@@ -2,10 +2,9 @@ const https=require('https');
 
 function consulta(filtre){
   filtre = filtre || "";
+
   let api='https://analisi.transparenciacatalunya.cat/resource/xuwf-dxjd.json';
-
   let api_amb_filtre = api + filtre;
-
   console.log(`consultant ${api_amb_filtre}\n`);
 
   https.get(api_amb_filtre, resp=>{
