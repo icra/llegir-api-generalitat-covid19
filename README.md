@@ -2,10 +2,10 @@
 
 interfície web per llegir la base de dades pública de casos covid 19 de la Generalitat de Catalunya
 
-web:
+web generalitat:
 https://analisi.transparenciacatalunya.cat/Salut/Registre-de-casos-de-COVID-19-realitzats-a-Catalun/xuwf-dxjd
 
-api endpoint:
+api endpoint (url amb les dades que volem):
 https://analisi.transparenciacatalunya.cat/resource/xuwf-dxjd.json
 
 ## Instruccions
