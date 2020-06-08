@@ -1,10 +1,9 @@
 Hola,
 
-Pots fer na ullada a això?
-
+Pots fer una ullada a això?
 https://github.com/underreported/COVID19_UR
 
-m’interessa tenir les corves d’igualada i de Barcelona (de la meitat de Barcelona).
+m’interessa tenir les corbes d’igualada i de Barcelona (de la meitat de Barcelona).
 
 Seria fàcil utilitzar aquest codi? És important, és per l’estudi que estem fent
 de mesurar sars-cov-2 en les aigues residuals. Ja tenim els résultats i volem
@@ -17,11 +16,4 @@ https://analisi.transparenciacatalunya.cat/Salut/Registre-de-casos-de-COVID-19-r
 podríes fer una petita web que descarregués les dades a un Excel?
 
 punt final api:
-  https://analisi.transparenciacatalunya.cat/resource/xuwf-dxjd.json
-
-
-Merciii!!
-
-salut,
-
-Lluís Corominas
+https://analisi.transparenciacatalunya.cat/resource/xuwf-dxjd.json
