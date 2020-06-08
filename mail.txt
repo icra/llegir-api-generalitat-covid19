@@ -1,0 +1,27 @@
+Hola,
+
+Pots fer na ullada a això?
+
+https://github.com/underreported/COVID19_UR
+
+m’interessa tenir les corves d’igualada i de Barcelona (de la meitat de Barcelona).
+
+Seria fàcil utilitzar aquest codi? És important, és per l’estudi que estem fent
+de mesurar sars-cov-2 en les aigues residuals. Ja tenim els résultats i volem
+comparar amb els casos reals. Volem veure quan apareix el pic amb els casos
+reals i quan veiem el pic en les aigües residuals.
+
+Mira’t please també aquesta api:
+https://analisi.transparenciacatalunya.cat/Salut/Registre-de-casos-de-COVID-19-realitzats-a-Catalun/xuwf-dxjd;
+és fácil de fer servir? Si et dono un llistat de ABS (árees bàsiques de salut),
+podríes fer una petita web que descarregués les dades a un Excel?
+
+punt final api:
+  https://analisi.transparenciacatalunya.cat/resource/xuwf-dxjd.json
+
+
+Merciii!!
+
+salut,
+
+Lluís Corominas

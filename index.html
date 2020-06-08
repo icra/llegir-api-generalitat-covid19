@@ -1,0 +1,150 @@
+<!doctype html><html><head>
+  <meta charset=utf8>
+  <title>llegeix api</title>
+  <!--vue
+    development version, includes helpful console warnings
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    production version, optimized for size and speed
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head><body>
+
+<!--vue template-->
+<div id=app>
+  <h1>
+    Llegir api<br>
+    <small>
+      "https://analisi.transparenciacatalunya.cat/resource/xuwf-dxjd.json"
+    </small>
+  </h1><hr>
+
+  <!--seccio filtres-->
+  <div>
+    <b>Filtra les dades</b>
+    <table>
+      <tr v-for="c in claus">
+        <td v-html="c.clau">
+        <td>
+          <input
+            v-model="c.filtre"
+            :type="c.tipus"
+            :placeholder="c.clau"
+            @keyup.enter="llegeix_api"
+          >
+        </td>
+        <td>
+          &ne; <input type=checkbox v-model="c.not_equal">
+        </td>
+        <td v-if="c.filtre!=''">
+          <button @click="c.filtre=''">neteja</button>
+        </td>
+      </tr>
+    </table>
+    <button @click="llegeix_api()" style="padding:1em 2em">
+      LLEGIR API (aplicant filtres)
+    </button>
+  </div><hr>
+
+  <!--nombre de resultats-->
+  <div v-if="dades">
+    Resultats: {{dades.length}}
+    <hr>
+  </div>
+
+  <!--taula resultats-->
+  <table border=1 style="border-collapse:collapse">
+    <tr>
+      <th
+        v-for="c in claus"
+      >
+        <span class=clau @click="ordena_dades(c.clau)">
+          {{c.clau}}
+        </span>
+      </th>
+    </tr>
+    <tr v-if="!dades">
+      <td :colspan="claus.length">clica el botó "llegir api"</td>
+    </tr>
+    <tr v-for="d in dades">
+      <td v-for="c in claus">
+        {{d[c.clau]}}
+      </td>
+    </tr>
+  </table>
+</div>
+
+<script>
+  let app=new Vue({
+    el:"#app",
+    data:{
+      dades:null,
+      claus:[
+        {clau:"data",                     tipus:"date", filtre:"", not_equal:false},
+        {clau:"regiosanitariacodi",       tipus:"text", filtre:"", not_equal:false},
+        {clau:"regiosanitariadescripcio", tipus:"text", filtre:"", not_equal:false},
+        {clau:"sectorsanitaricodi",       tipus:"text", filtre:"", not_equal:false},
+        {clau:"sectorsanitaridescripcio", tipus:"text", filtre:"", not_equal:false},
+        {clau:"abscodi",                  tipus:"text", filtre:"005", not_equal:false},
+        {clau:"absdescripcio",            tipus:"text", filtre:"", not_equal:false},
+        {clau:"sexecodi",                 tipus:"text", filtre:"", not_equal:false},
+        {clau:"sexedescripcio",           tipus:"text", filtre:"", not_equal:false},
+        {clau:"resultatcoviddescripcio",  tipus:"text", filtre:"Sospitós", not_equal:true},
+        {clau:"numcasos",                 tipus:"text", filtre:"", not_equal:false},
+      ],
+    },
+    methods:{
+      //consulta endpoint api amb els filtres
+      llegeix_api(){
+        let url = "https://analisi.transparenciacatalunya.cat/resource/xuwf-dxjd.json";
+        let url_amb_filtre = url + this.get_filtre();
+        console.log("consultant "+url_amb_filtre+" ...");
+        let req = new XMLHttpRequest();
+        req.open('GET',url_amb_filtre);
+        let _this = this;
+        req.addEventListener("load",function(){
+          _this.dades = JSON.parse(this.responseText);
+        });
+        req.send();
+      },
+
+      //crea un filtre per l'endpoint de l'api. per exemple --> "api-url.com/?data=2020-12-31"
+      get_filtre(){
+        let filtre=[];
+        this.claus.forEach(c=>{
+          if(c.filtre!=""){
+            if(c.not_equal){
+              filtre.push(`$where=${c.clau} != '${c.filtre}'`);
+            }else{
+              filtre.push(`${c.clau}=${c.filtre}`);
+            }
+          }
+        });
+        if(filtre.length==0){
+          return "";
+        }else{
+          return "?"+filtre.join('&');
+        }
+      },
+
+      //ordena dades
+      ordena_dades(key){
+        this.dades.sort(function(a,b){
+          let x = a[key];
+          let y = b[key];
+          return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
+      },
+    },
+  });
+</script>
+
+<style>
+  span.clau {
+    cursor:pointer;
+    color:blue;
+  }
+  span.clau:hover {
+    text-decoration:underline
+  }
+</style>
