@@ -21,8 +21,9 @@
 
   <!--seccio filtres-->
   <div>
-    <b>Filtra les dades</b><hr>
+    <!--tipus de filtre-->
     <div>
+      <b>Filtre:</b>
       <label>
         Simple
         <input type=radio name=filtre_tipus v-model="filtre_tipus" value="simple">
@@ -33,6 +34,7 @@
       </label>
     </div><hr>
 
+    <!--filtre simple-->
     <table v-if="filtre_tipus=='simple'">
       <tr v-for="c in claus">
         <td>
@@ -55,13 +57,14 @@
       </tr>
     </table>
 
+    <!--filtre avançat-->
     <div v-if="filtre_tipus=='advanced'">
       Filtre SoQL:<br>
       <textarea rows=10 cols=75 v-model="filtre_advanced" placeholder="sintaxi SoQL"></textarea>
       <button v-if="filtre_advanced!=''" @click="filtre_advanced=''">neteja</button>
-      <br><br>
-    </div>
+    </div><hr>
 
+    <!--botó llegir api-->
     <button @click="llegeix_api()" style="padding:1em 2em">
       LLEGIR API (aplicant filtres)
     </button>
@@ -69,54 +72,44 @@
 
   <!--nombre de resultats-->
   <div v-if="dades">
-    Resultats: {{typeof(dades.length)=='number' ? dades.length : (dades.error?'error': dades) }} <hr>
+    Resultats:
+    {{
+      typeof(dades.length)=='number' ? dades.length :
+      (dades.error?'error':dades)
+    }}
+    <hr>
   </div>
 
   <!--taula resultats-->
-  <table border=1 style="border-collapse:collapse" v-if="dades!=null && dades.length">
-
-    <tr v-if="filtre_tipus=='simple'">
-      <th v-for="c in claus">
-        <span class=clau @click="ordena_dades(c.clau)">
-          {{c.clau}}
-        </span>
-      </th>
-    </tr>
-
-    <tr v-if="filtre_tipus=='advanced'">
-      <th v-for="key in Object.keys(dades[0])">
-        <span class=clau @click="ordena_dades(key)">
-          {{key}}
-        </span>
-      </th>
-    </tr>
-
-    <tr v-if="!dades">
-      <td :colspan="claus.length">
-        clica el botó "LLEGIR API"
-      </td>
-    </tr>
-
-    <tbody v-if="filtre_tipus=='simple'">
-      <tr v-for="d in dades">
-        <td v-for="c in claus">
-          {{d[c.clau]}}
+  <table
+    v-if="dades!=null && dades.length"
+    style="border-collapse:collapse"
+    border=1
+  >
+    <thead>
+      <tr>
+        <th v-for="key in Object.keys(dades[0])">
+          <span class=clau @click="ordena_dades(key)">
+            {{key}}
+          </span>
+        </th>
+      </tr>
+      <tr v-if="!dades">
+        <td :colspan="claus.length">
+          clica el botó "LLEGIR API"
         </td>
       </tr>
-    </tbody>
+    </thead>
 
-    <tbody v-if="filtre_tipus=='advanced'">
+    <tbody>
       <tr v-for="d in dades">
         <td v-for="key in Object.keys(dades[0])">
           {{d[key]}}
         </td>
       </tr>
     </tbody>
-
   </table>
-  <div v-else>
-    {{dades}}
-  </div>
+  <div v-else>{{dades}}</div>
 </div>
 
 <script>
@@ -150,12 +143,12 @@
       filtre_tipus:"advanced",
       filtre_advanced:`$select=data,sum(numcasos)
         &$group=data
-        &$where=resultatcoviddescripcio not like 'Sospit' AND (
+        &$order=data ASC
+        &$where=resultatcoviddescripcio not like 'Sospitós' AND (
           abscodi    = '016'
           OR abscodi = '017'
           OR abscodi = '028'
         )
-        &$order=data ASC
       `.trim_linestarts(),
     },
     methods:{
