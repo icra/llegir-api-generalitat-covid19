@@ -13,9 +13,15 @@
 <!--vue template-->
 <div id=app>
   <h1>
-    Llegir api covid19<br>
+    Llegir api covid19
+    <br>
+    Segregació:
+    <select v-model="segregacio">
+      <option>per ABS     </option>
+      <option>per municipi</option>
+    </select>
     <small>
-      "https://analisi.transparenciacatalunya.cat/resource/xuwf-dxjd.json"
+      ({{get_segregacio().url}})
     </small>
   </h1><hr>
 
@@ -36,7 +42,7 @@
 
     <!--filtre simple-->
     <table v-if="filtre_tipus=='simple'">
-      <tr v-for="c in claus">
+      <tr v-for="c in get_segregacio().claus">
         <td>
           <span v-html="c.clau"></span>
         </td>
@@ -95,7 +101,7 @@
         </th>
       </tr>
       <tr v-if="!dades">
-        <td :colspan="claus.length">
+        <td :colspan="get_segregacio().claus.length">
           clica el botó "LLEGIR API"
         </td>
       </tr>
@@ -126,21 +132,46 @@
   let app=new Vue({
     el:"#app",
     data:{
-      dades:null, //dades llegides api
-      claus:[
-        {clau:"data",                     tipus:"date", filtre:"", not_equal:false},
-        {clau:"regiosanitariacodi",       tipus:"text", filtre:"", not_equal:false},
-        {clau:"regiosanitariadescripcio", tipus:"text", filtre:"", not_equal:false},
-        {clau:"sectorsanitaricodi",       tipus:"text", filtre:"", not_equal:false},
-        {clau:"sectorsanitaridescripcio", tipus:"text", filtre:"", not_equal:false},
-        {clau:"abscodi",                  tipus:"text", filtre:"005", not_equal:false},
-        {clau:"absdescripcio",            tipus:"text", filtre:"", not_equal:false},
-        {clau:"sexecodi",                 tipus:"text", filtre:"", not_equal:false},
-        {clau:"sexedescripcio",           tipus:"text", filtre:"", not_equal:false},
-        {clau:"resultatcoviddescripcio",  tipus:"text", filtre:"Sospitós", not_equal:true},
-        {clau:"numcasos",                 tipus:"text", filtre:"", not_equal:false},
+      segregacio:"per ABS", //segregacio actual
+
+      dades:null,           //dades llegides api
+
+      segregacions:[
+        {
+          segregacio:"per ABS",
+          url:"https://analisi.transparenciacatalunya.cat/resource/xuwf-dxjd.json",
+          claus:[
+            {clau:"data",                     tipus:"date", filtre:"", not_equal:false},
+            {clau:"regiosanitariacodi",       tipus:"text", filtre:"", not_equal:false},
+            {clau:"regiosanitariadescripcio", tipus:"text", filtre:"", not_equal:false},
+            {clau:"sectorsanitaricodi",       tipus:"text", filtre:"", not_equal:false},
+            {clau:"sectorsanitaridescripcio", tipus:"text", filtre:"", not_equal:false},
+            {clau:"abscodi",                  tipus:"text", filtre:"", not_equal:false},
+            {clau:"absdescripcio",            tipus:"text", filtre:"", not_equal:false},
+            {clau:"sexecodi",                 tipus:"text", filtre:"", not_equal:false},
+            {clau:"sexedescripcio",           tipus:"text", filtre:"", not_equal:false},
+            {clau:"resultatcoviddescripcio",  tipus:"text", filtre:"Sospitós", not_equal:true},
+            {clau:"numcasos",                 tipus:"text", filtre:"", not_equal:false},
+          ],
+        },
+        {
+          segregacio:"per municipi",
+          url:"https://analisi.transparenciacatalunya.cat/resource/jj6z-iyrp.json",
+          claus:[
+            {clau:"data",                    tipus:"date", filtre:"", not_equal:false},
+            {clau:"comarcacodi",             tipus:"text", filtre:"", not_equal:false},
+            {clau:"comarcadescripcio",       tipus:"text", filtre:"", not_equal:false},
+            {clau:"municipicodi",            tipus:"text", filtre:"", not_equal:false},
+            {clau:"municipidescripcio",      tipus:"text", filtre:"", not_equal:false},
+            {clau:"sexecodi",                tipus:"text", filtre:"", not_equal:false},
+            {clau:"sexedescripcio",          tipus:"text", filtre:"", not_equal:false},
+            {clau:"resultatcoviddescripcio", tipus:"text", filtre:"Sospitós", not_equal:true},
+            {clau:"numcasos",                tipus:"text", filtre:"", not_equal:false},
+          ],
+        },
       ],
-      filtre_tipus:"advanced",
+
+      filtre_tipus:"simple",
       filtre_advanced:`$select=data,sum(numcasos)
         &$group=data
         &$order=data ASC
@@ -152,10 +183,16 @@
       `.trim_linestarts(),
     },
     methods:{
+      get_segregacio(){
+        return this.segregacions.find(s=>s.segregacio==this.segregacio);
+      },
+
       //consulta api endpoint amb filtres
       llegeix_api(){
-        let url = "https://analisi.transparenciacatalunya.cat/resource/xuwf-dxjd.json";
+        let segregacio     = this.get_segregacio();
+        let url            = segregacio.url;
         let url_amb_filtre = url + this.get_filtre();
+
         console.log("consultant "+url_amb_filtre);
         let req = new XMLHttpRequest();
         req.open('GET',url_amb_filtre);
@@ -174,7 +211,8 @@
         }
 
         let filtre=[];
-        this.claus.forEach(c=>{
+
+        this.get_segregacio().claus.forEach(c=>{
           if(c.filtre!=""){
             if(c.not_equal){
               filtre.push(`$where=${c.clau} != '${c.filtre}'`);
